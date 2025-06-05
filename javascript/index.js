@@ -8,13 +8,6 @@ const albumArt = document.getElementById("album-art");
 let spinning = false;
 let accessToken = null;
 
-// 🎧 Simulate login
-loginBtn.addEventListener("click", () => {
-  alert("Simulated Spotify login. Real OAuth coming soon.");
-  mockPlaylistUI();
-  startSpinning();
-});
-
 // 🌀 Start/stop vinyl spin
 function startSpinning() {
   if (!spinning) {
@@ -61,3 +54,24 @@ function updateAlbumArt(playlistName) {
 
   albumArt.src = fakeArt[playlistName] || "https://via.placeholder.com/100x100.png?text=Album";
 }
+
+loginBtn.addEventListener("click", async () => {
+  const authCode = localStorage.getItem("spotify_auth_code");
+  if (!authCode) {
+    initiateSpotifyLogin(); // from auth.js
+  } else {
+    const token = await exchangeToken(authCode);
+    accessToken = token;
+    console.log("✅ Spotify access token:", token);
+    mockPlaylistUI(); // or real fetch coming next
+    startSpinning();
+  }
+});
+
+const resetBtn = document.getElementById("reset-auth");
+
+resetBtn.addEventListener("click", () => {
+  localStorage.removeItem("spotify_auth_code");
+  localStorage.removeItem("verifier");
+  alert("Auth state cleared. Reload the page and login again.");
+});
