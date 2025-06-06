@@ -1,14 +1,48 @@
-console.log("🎵 Vinyl Spotify Player loaded");
-
-const loginBtn = document.getElementById("login-btn");
 const playlistList = document.getElementById("playlist-list");
 const vinyl = document.getElementById("vinyl");
 const albumArt = document.getElementById("album-art");
 
 let spinning = false;
 let accessToken = null;
+let deviceReady = null;
+const waitForDevice = new Promise(resolve => deviceReady = resolve);
 
-// 🌀 Start/stop vinyl spin
+let player = null;
+
+player.addListener('ready', ({ device_id }) => {
+  console.log('✅ Player is ready with device ID', device_id);
+  window.playerDeviceId = device_id;
+  deviceReady(); // resolve promise
+});
+
+
+function setupSpotifyPlayer() {
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    player = new Spotify.Player({
+      name: 'Vinyl Web Player',
+      getOAuthToken: cb => { cb(accessToken); },
+      volume: 0.8
+    });
+
+    player.addListener('ready', ({ device_id }) => {
+      console.log('✅ Player is ready with device ID', device_id);
+      window.playerDeviceId = device_id;
+    });
+
+    player.addListener('not_ready', ({ device_id }) => {
+      console.warn('⚠️ Player went offline', device_id);
+    });
+
+    player.addListener('initialization_error', e => console.error('Init error', e));
+    player.addListener('authentication_error', e => console.error('Auth error', e));
+    player.addListener('account_error', e => console.error('Account error', e));
+
+    player.connect();
+  };
+}
+
+
+// Vinyl animation-based functions ---------------------------------------------
 function startSpinning() {
   if (!spinning) {
     vinyl.classList.add("spinning");
@@ -20,40 +54,70 @@ function stopSpinning() {
   vinyl.classList.remove("spinning");
   spinning = false;
 }
+// -----------------------------------------------------------------------------
 
-// 📝 Mock playlists and click handlers
-function mockPlaylistUI() {
-  const playlists = ["Lo-Fi Beats", "Chill Vibes", "Retro Vinyl", "Jazz Classics"];
-  playlistList.innerHTML = "";
+async function loadUserPlaylists() {
+  const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 
-  playlists.forEach(name => {
+  const data = await res.json();
+  console.log("🎵 Your Playlists:", data);
+
+  playlistList.innerHTML = ""; // Clear existing
+
+  data.items.forEach(playlist => {
     const div = document.createElement("div");
-    div.textContent = name;
+    div.textContent = playlist.name;
     div.style.cursor = "pointer";
     div.style.padding = "0.5rem";
     div.style.borderBottom = "1px solid #444";
 
     div.addEventListener("click", () => {
-      alert(`Pretend we're playing "${name}"`);
-      updateAlbumArt(name);
-      startSpinning();
+      console.log("🎧 Selected:", playlist.name);
+      updateAlbumArtFromPlaylist(playlist);
+      playPlaylist(playlist.uri);
     });
 
     playlistList.appendChild(div);
   });
 }
 
-// 🎨 Simulate changing album art (random image)
-function updateAlbumArt(playlistName) {
-  const fakeArt = {
-    "Lo-Fi Beats": "https://via.placeholder.com/100x100.png?text=Lo-Fi",
-    "Chill Vibes": "https://via.placeholder.com/100x100.png?text=Chill",
-    "Retro Vinyl": "https://via.placeholder.com/100x100.png?text=Retro",
-    "Jazz Classics": "https://via.placeholder.com/100x100.png?text=Jazz"
-  };
-
-  albumArt.src = fakeArt[playlistName] || "https://via.placeholder.com/100x100.png?text=Album";
+function updateAlbumArtFromPlaylist(playlist) {
+  const img = playlist.images?.[0]?.url;
+  albumArt.src = img || "https://via.placeholder.com/100x100.png?text=No+Art";
 }
+
+function playPlaylist(uri) {
+  if (!window.playerDeviceId) {
+    alert("Player is still loading. Please try again in a moment.");
+    return;
+  }
+
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.playerDeviceId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      context_uri: uri,
+      offset: { position: 0 }
+    })
+  }).then(() => {
+    console.log('▶️ Playback started');
+    startSpinning();
+  }).catch(err => {
+    console.error("Playback failed:", err);
+  });
+}
+
+
+// Behaviour for the authentication-based buttons ------------------------------
+const loginBtn = document.getElementById("login-btn");
+const resetBtn = document.getElementById("reset-auth");
 
 loginBtn.addEventListener("click", async () => {
   const authCode = localStorage.getItem("spotify_auth_code");
@@ -62,16 +126,15 @@ loginBtn.addEventListener("click", async () => {
   } else {
     const token = await exchangeToken(authCode);
     accessToken = token;
-    console.log("✅ Spotify access token:", token);
-    mockPlaylistUI(); // or real fetch coming next
-    startSpinning();
+    setupSpotifyPlayer();
+    await waitForDevice;
+    await loadUserPlaylists();
   }
 });
-
-const resetBtn = document.getElementById("reset-auth");
 
 resetBtn.addEventListener("click", () => {
   localStorage.removeItem("spotify_auth_code");
   localStorage.removeItem("verifier");
   alert("Auth state cleared. Reload the page and login again.");
 });
+// -----------------------------------------------------------------------------
