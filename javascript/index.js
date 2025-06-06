@@ -43,6 +43,24 @@ function initSpotifyPlayer() {
     console.warn('⚠️ Spotify Player went offline:', device_id);
   });
 
+  player.addListener('player_state_changed', (state) => {
+    if (!state) return;
+
+    const { paused, track_window } = state;
+
+    if (paused) {
+      stopSpinning();
+    } else {
+      startSpinning();
+    }
+
+    // Update album art from current track (not just playlist art)
+    const currentTrack = track_window.current_track;
+    if (currentTrack?.album?.images?.[0]?.url) {
+      albumArt.src = currentTrack.album.images[0].url;
+    }
+  });
+
   player.connect();
 }
 
