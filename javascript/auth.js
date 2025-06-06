@@ -1,10 +1,13 @@
 const clientId = window.env.SPOTIFY_CLIENT_ID;; // Replace with your Client ID
 const redirectUri = "http://127.0.0.1:5500/html/token.html";
+
 const scopes = [
-  "user-read-playback-state",
-  "user-modify-playback-state",
   "streaming",
-  "playlist-read-private"
+  "playlist-read-private",
+  "user-read-email",
+  "user-read-private",
+  "user-modify-playback-state",
+  "user-read-playback-state"
 ];
 
 function generateCodeVerifier() {
