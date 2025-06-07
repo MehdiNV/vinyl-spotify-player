@@ -1,13 +1,10 @@
-const playlistList = document.getElementById("playlist-list");
-const vinyl = document.getElementById("vinyl");
-const albumArt = document.getElementById("album-art");
-
 let spinning = false;
 let accessToken = null;
 
 // Spotify Player (Web SKD) initilisation logic --------------------------------
 let player;
 let deviceReady;
+let currentUserId = null;
 const waitForDevice = new Promise(resolve => deviceReady = resolve);
 
 window.onSpotifyWebPlaybackSDKReady = () => {
@@ -66,8 +63,58 @@ function initSpotifyPlayer() {
 // -----------------------------------------------------------------------------
 
 
-// Vinyl animation-based functions ---------------------------------------------
+// Search playlists functionality ---------------------------------------------
+const spotifyPanelPlaylists = document.querySelector(".spotifyPanelPlaylists");
+const usersPlaylists = document.querySelector(".spotifyPanelPlaylists ul");
+let allPlaylists = [];
 
+async function fetchCurrentUserId() {
+  const res = await fetch("https://api.spotify.com/v1/me", {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+
+  if (!res.ok) {
+    console.error("Failed to get user profile.");
+    return null;
+  }
+
+  const data = await res.json();
+  currentUserId = data.id;
+  return data.id;
+}
+
+async function fetchAllPlaylists() {
+  const res = await fetch("https://api.spotify.com/v1/me/playlists?limit=100", {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+
+  if (!res.ok) {
+    console.error("Failed to fetch playlists.");
+    return [];
+  }
+
+  const data = await res.json();
+  const filteredPlaylists = data.items.filter(p => p.owner.id === currentUserId && p.public);
+
+  console.log("Returning filtered list of playlists...", filteredPlaylists);
+  return filteredPlaylists
+}
+
+function renderPlaylists(playlists) {
+  usersPlaylists.innerHTML = ""; // Clear existing
+  if (playlists.length === 0) {
+    console.log("No playlists found, returning nothing...");
+    usersPlaylists.innerHTML = "<li>No public playlists found.</li>";
+    return;
+  }
+
+  console.log("Adding existing playlists to li...");
+  playlists.forEach(playlist => {
+    const li = document.createElement("li");
+    li.textContent = playlist.name;
+    usersPlaylists.appendChild(li);
+  });
+}
 // -----------------------------------------------------------------------------
 
 // Behaviour for the authentication-based buttons ------------------------------
@@ -123,9 +170,15 @@ powerOnButton.addEventListener("click", async () => {
     }
 
     await waitForDevice;
+    await fetchCurrentUserId(); // Get the ID of this current user
+    const usersPlaylists = await fetchAllPlaylists();
+    renderPlaylists(usersPlaylists);
+    spotifyPanelPlaylists.style.display = "block";
   }
   else {
     console.log("⚪ Power OFF");
+    spotifyPanelPlaylists.style.display = "none";
+    usersPlaylists.innerHTML = "";
   }
 });
 
