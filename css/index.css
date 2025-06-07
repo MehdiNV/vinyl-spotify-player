@@ -81,6 +81,7 @@ body {
   gap: 1rem;
 }
 
+/* Login, Power On and Reset button styling --------------------------------- */
 #login-btn {
   padding: 0.75rem 1rem;
   border: none;
@@ -95,6 +96,37 @@ body {
 #login-btn:hover {
   background: #1ed760;
 }
+
+#turnOnVinyl-btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: #e74c3c;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+#turnOnVinyl-btn:hover {
+  background: #ff6f61;
+  box-shadow: 0 0 15px rgba(255, 111, 97, 0.7);
+}
+
+#turnOnVinyl-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 5px rgba(255, 111, 97, 0.9);
+}
+
+#turnOnVinyl-btn:disabled {
+  background: #444;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+}
+/* -------------------------------------------------------------------------- */
+
 
 #playlist-list {
   max-height: 300px;

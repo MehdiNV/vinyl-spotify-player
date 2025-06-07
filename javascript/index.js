@@ -181,24 +181,40 @@ function clearSpotifyAuth() {
 }
 
 const loginBtn = document.getElementById("login-btn");
+const turnOnVinylPlayerBtn = document.getElementById("turnOnVinyl-btn");
 const resetBtn = document.getElementById("reset-auth");
 
 loginBtn.addEventListener("click", async () => {
-  const authCode = localStorage.getItem("spotify_auth_code");
-  if (!authCode) {
-    initiateSpotifyLogin(); // from auth.js
-  } else {
-    const token = await exchangeToken(authCode);
-    accessToken = token;
+  initiateSpotifyLogin(); // from auth.js
 
-    if (window.waitForToken) {
-      console.log("🔁 Access token ready — initializing Spotify Player...");
-      initSpotifyPlayer();
-    }
+  loginBtn.disabled = true;
+  loginBtn.style.background = "#555";
+  loginBtn.style.cursor = "not-allowed";
 
-    await waitForDevice;
-    loadUserPlaylists();
+  setTimeout(() => {
+    loginBtn.textContent = "Logged In";
+    enableVinylPowerOnButton();
+  }, 1000);
+});
+
+function enableVinylPowerOnButton() {
+  turnOnVinylPlayerBtn.disabled = false;
+  turnOnVinylPlayerBtn.style.background = "#e74c3c"; // Restore normal style
+  turnOnVinylPlayerBtn.style.cursor = "pointer";
+  turnOnVinylPlayerBtn.textContent = "Turn on the Vinyl";
+}
+
+turnOnVinylPlayerBtn.addEventListener("click", async () => {
+  const token = await exchangeToken(authCode);
+  accessToken = token;
+
+  if (window.waitForToken) {
+    console.log("🔁 Access token ready — initializing Spotify Player...");
+    initSpotifyPlayer();
   }
+
+  await waitForDevice;
+  loadUserPlaylists();
 });
 
 resetBtn.addEventListener("click", () => {
