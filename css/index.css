@@ -1,7 +1,7 @@
 body, html {
-  margin: 0;
   background-color: #000;
   font-family: Arial, sans-serif;
+  margin: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -9,14 +9,17 @@ body, html {
 
 .container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Fill full screen height */
+  width: 100vw;  /* Ensure full screen width */
 }
 
 .vinylBoxImage {
-  align-self: center;
-  max-width: 98vw;
-  max-height: 98vh;
-  width: auto;
+  width: 100%;
   height: auto;
+  max-width: 99vw;
+  max-height: 98vh;
   z-index: 0;
 }
 
