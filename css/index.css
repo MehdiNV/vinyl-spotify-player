@@ -18,33 +18,45 @@ body, html {
 .vinylBoxImage {
   width: 100%;
   height: auto;
-  max-width: 99vw;
-  max-height: 98vh;
+  max-width: 98vw;
+  max-height: 96vh;
   z-index: 0;
 }
 
 /* Login, Power On and Reset button styling --------------------------------- */
 .spotify-panel {
-  opacity: 0.9;
-  position: absolute;
-  top: 14%;
-  right: 12%;
-  width: 250px;
-  padding: 1rem;
+  background: none;
   display: flex;
   flex-direction: column;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
   gap: 1rem;
+  opacity: 0.9;
+  padding: 1rem;
+  position: absolute;
+  right: 12%;
+  top: 14%;
+  width: auto;
+}
+
+
+.button-row {
+  display: flex;
+  gap: 0.75rem;
 }
 
 /* Login button.... */
 #login-btn {
-  border: 2px solid black;
-  padding: 1rem;
-  background: #1DB954;
-  color: white;
-  font-size: 1rem;
+  background-color: #1DB954;
+  border: 2px solid #0a0;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 #000;
+  color: #000;
   cursor: pointer;
-  transition: background 0.3s;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
 }
 
 #login-btn:hover {
@@ -53,13 +65,21 @@ body, html {
 
 /* Power-on button.... */
 #turnOnVinyl-btn {
-  border: 2px solid black;
-  padding: 1rem;
-  background: #e74c3c;
-  color: white;
-  font-size: 1rem;
+  align-self: center;
+  background-color: #e74c3c;
+  border: 2px solid #900;
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 #000;
+  color: #000;
+  color: #000;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  height: 2.75rem;
+  line-height: 1;
+  text-align: center;
+  text-transform: none;
+  width: 2.75rem;
 }
 
 #turnOnVinyl-btn:hover {
@@ -73,21 +93,34 @@ body, html {
 }
 
 #turnOnVinyl-btn:disabled {
-  background: #444;
+  background-color: #e74c3c;
+  border: 2px solid #900;
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 #000;
+  color: #000;
   cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.6;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  height: 2.75rem;
+  line-height: 1;
+  opacity: 0.7;
+  text-align: center;
+  text-transform: none;
+  width: 2.75rem;
 }
 
 /* Reset button.... */
 #reset-auth {
-  border: 2px solid black;
-  padding: 1rem;
-  background: #c0392b;
-  color: white;
-  font-size: 1rem;
+  background-color: #555;
+  border: 2px solid #888;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 #000;
+  color: #fff;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
 }
 
 #reset-auth:hover {

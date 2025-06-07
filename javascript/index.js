@@ -177,7 +177,6 @@ function enableVinylPowerOnButton() {
   turnOnVinylPlayerBtn.disabled = false;
   turnOnVinylPlayerBtn.style.background = "#e74c3c"; // Restore normal style
   turnOnVinylPlayerBtn.style.cursor = "pointer";
-  turnOnVinylPlayerBtn.textContent = "Turn on the Vinyl";
 }
 
 turnOnVinylPlayerBtn.addEventListener("click", async () => {

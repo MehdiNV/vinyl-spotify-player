@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/favicon1.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <title>Vinyl Player</title>
 </head>
@@ -14,8 +15,11 @@
 
     <!-- Control Panel embedded in box -->
     <div class="spotify-panel">
-      <button id="login-btn">Login with Spotify</button>
-      <button id="turnOnVinyl-btn" disabled>Turn on the Vinyl</button>
+      <div class="button-row">
+        <button id="login-btn">Login</button>
+        <button id="turnOnVinyl-btn" aria-label="Power Button" disabled>⏻</button>
+      </div>
+
       <button id="reset-auth">Reset Auth</button>
       <div id="playlist-list"></div>
     </div>
