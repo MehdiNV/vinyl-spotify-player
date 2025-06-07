@@ -147,32 +147,8 @@ function stopSpinning() {
 
 // Behaviour for the authentication-based buttons ------------------------------
 window.addEventListener("DOMContentLoaded", async () => {
-  // Detect if we've just authenticated, and hence should start loading Spotify data...
-  const authCode = localStorage.getItem("spotify_auth_code");
-
-  if (authCode && !accessToken) {
-    console.log("🔐 Found stored auth code. Attempting login...");
-
-    try {
-      const token = await exchangeToken(authCode);
-      accessToken = token;
-
-      if (window.waitForToken) {
-        console.log("🔁 Access token ready — initializing Spotify Player...");
-        initSpotifyPlayer();
-      }
-
-      await waitForDevice;
-      await loadUserPlaylists();
-
-    } catch (err) {
-      console.error("❌ Auth failed on page load:", err);
-
-      // ✅ Wipe invalid auth state
-      clearSpotifyAuth();
-      alert("Your Spotify session expired. Please log in again.");
-    }
-  }
+  // Clear any pre-existing authentication data if it exists
+  clearSpotifyAuth();
 });
 
 function clearSpotifyAuth() {
@@ -205,6 +181,7 @@ function enableVinylPowerOnButton() {
 }
 
 turnOnVinylPlayerBtn.addEventListener("click", async () => {
+  const authCode = localStorage.getItem("spotify_auth_code");
   const token = await exchangeToken(authCode);
   accessToken = token;
 
