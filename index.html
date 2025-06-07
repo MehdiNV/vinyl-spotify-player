@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/favicon1.ico" type="image/x-icon">
-  <link rel="stylesheet" href="css/index.css" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/index.css" />
 
   <title>Vinyl Player</title>
 </head>
@@ -16,12 +17,11 @@
     <!-- Control Panel embedded in box -->
     <div class="spotify-panel">
       <div class="button-row">
-        <button id="login-btn">Login</button>
-        <button id="turnOnVinyl-btn" aria-label="Power Button" disabled>⏻</button>
+        <button class = "nes-btn is-success loginButton" id = "loginButton">Login</button>
+        <button class = "nes-btn is-disabled powerButton" aria-label="Power Button" disabled id = "powerButton">⏻</button>
       </div>
 
-      <button id="reset-auth">Reset Auth</button>
-      <div id="playlist-list"></div>
+      <button class = "nes-btn is-warning resetButton" id = "resetButton">Reset Auth</button>
     </div>
   </div>
 

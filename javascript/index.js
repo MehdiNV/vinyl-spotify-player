@@ -63,86 +63,11 @@ function initSpotifyPlayer() {
 
   player.connect();
 }
-
-// Load in the user's Playlist data after they've authenticated...
-async function loadUserPlaylists() {
-  try {
-    const res = await fetch("https://api.spotify.com/v1/me/playlists", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    const data = await res.json();
-    console.log("🎵 Your Playlists:", data);
-
-    playlistList.innerHTML = ""; // Clear existing items
-
-    data.items.forEach(playlist => {
-      const div = document.createElement("div");
-      div.textContent = playlist.name;
-      div.style.cursor = "pointer";
-      div.style.padding = "0.5rem";
-      div.style.borderBottom = "1px solid #444";
-
-      div.addEventListener("click", () => {
-        console.log("🎧 Selected:", playlist.name);
-        updateAlbumArtFromPlaylist(playlist);
-        playPlaylist(playlist.uri);
-      });
-
-      playlistList.appendChild(div);
-    });
-
-  } catch (err) {
-    console.error("❌ Failed to load playlists:", err);
-  }
-}
-
-function updateAlbumArtFromPlaylist(playlist) {
-  const img = playlist.images?.[0]?.url;
-  albumArt.src = img || "https://via.placeholder.com/100x100.png?text=No+Art";
-}
-
-function playPlaylist(uri) {
-  if (!window.playerDeviceId) {
-    alert("Spotify Player not ready yet. Try again in a moment.");
-    return;
-  }
-
-  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.playerDeviceId}`, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      context_uri: uri,
-      offset: { position: 0 }
-    })
-  }).then(() => {
-    console.log('▶️ Playback started');
-    startSpinning();
-  }).catch(err => {
-    console.error("Playback failed:", err);
-  });
-}
-
 // -----------------------------------------------------------------------------
 
 
 // Vinyl animation-based functions ---------------------------------------------
-function startSpinning() {
-  if (!spinning) {
-    vinyl.classList.add("spinning");
-    spinning = true;
-  }
-}
 
-function stopSpinning() {
-  vinyl.classList.remove("spinning");
-  spinning = false;
-}
 // -----------------------------------------------------------------------------
 
 // Behaviour for the authentication-based buttons ------------------------------
@@ -156,16 +81,19 @@ function clearSpotifyAuth() {
   localStorage.removeItem("verifier");
 }
 
-const loginBtn = document.getElementById("login-btn");
-const turnOnVinylPlayerBtn = document.getElementById("turnOnVinyl-btn");
-const resetBtn = document.getElementById("reset-auth");
+const loginBtn = document.getElementById("loginButton");
+const powerOnButton = document.getElementById("powerButton");
+const resetBtn = document.getElementById("resetButton");
 
 loginBtn.addEventListener("click", async () => {
-  initiateSpotifyLogin(); // from auth.js
+  initiateSpotifyLogin(); // Initite the authorisation flow via Auth.JS code
 
   loginBtn.disabled = true;
   loginBtn.style.background = "#555";
   loginBtn.style.cursor = "not-allowed";
+
+  loginBtn.classList.remove("is-success");
+  loginBtn.classList.add("is-disabled");
 
   setTimeout(() => {
     loginBtn.textContent = "Logged In";
@@ -174,9 +102,10 @@ loginBtn.addEventListener("click", async () => {
 });
 
 function enableVinylPowerOnButton() {
-  turnOnVinylPlayerBtn.disabled = false;
-  turnOnVinylPlayerBtn.style.background = "#e74c3c"; // Restore normal style
-  turnOnVinylPlayerBtn.style.cursor = "pointer";
+  powerOnButton.disabled = false;
+  powerOnButton.classList.remove("is-disabled");
+  powerOnButton.classList.add("is-error");
+  powerOnButton.style.cursor = "pointer";
 }
 
 turnOnVinylPlayerBtn.addEventListener("click", async () => {
