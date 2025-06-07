@@ -108,18 +108,25 @@ function enableVinylPowerOnButton() {
   powerOnButton.style.cursor = "pointer";
 }
 
-turnOnVinylPlayerBtn.addEventListener("click", async () => {
-  const authCode = localStorage.getItem("spotify_auth_code");
-  const token = await exchangeToken(authCode);
-  accessToken = token;
+powerOnButton.addEventListener("click", async () => {
+  powerButton.classList.toggle("powerButtonPressed");
+  const isPoweredOn = powerButton.classList.contains("powerButtonPressed");
 
-  if (window.waitForToken) {
-    console.log("🔁 Access token ready — initializing Spotify Player...");
-    initSpotifyPlayer();
+  if (isPoweredOn) {
+    const authCode = localStorage.getItem("spotify_auth_code");
+    const token = await exchangeToken(authCode);
+    accessToken = token;
+
+    if (window.waitForToken) {
+      console.log("🔁 Access token ready — initializing Spotify Player...");
+      initSpotifyPlayer();
+    }
+
+    await waitForDevice;
   }
-
-  await waitForDevice;
-  loadUserPlaylists();
+  else {
+    console.log("⚪ Power OFF");
+  }
 });
 
 resetBtn.addEventListener("click", () => {

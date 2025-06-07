@@ -62,6 +62,17 @@ body, html {
   text-align: center;
 }
 
+.powerButtonPressed {
+  background-color: #b30000 !important;
+  color: #fff;
+  box-shadow:
+    inset 3px 3px 0 #222,
+    inset -2px -2px 0 #000,
+    0 0 8px rgba(255, 0, 0, 0.6),
+    0 0 4px rgba(255, 50, 50, 0.8);
+  border-color: #800000 !important;
+}
+
 .resetButton {
   cursor: pointer;
   font-family: 'Press Start 2P', monospace;
