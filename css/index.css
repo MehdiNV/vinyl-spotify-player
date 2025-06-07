@@ -1,87 +1,43 @@
-/* Reset & Basics */
-* {
+body, html {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #121212;
+  background-color: #000;
   font-family: Arial, sans-serif;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 
 .container {
   display: flex;
-  gap: 2rem;
-  align-items: center;
 }
 
-/* Vinyl Player Styles */
-.vinyl-wrapper {
-  position: relative;
-  width: 300px;
-  height: 300px;
-}
-
-#vinyl {
-  width: 100%;
+.vinylBoxImage {
+  align-self: center;
+  max-width: 98vw;
+  max-height: 98vh;
+  width: auto;
   height: auto;
-  border-radius: 50%;
-  transition: transform 0.3s ease-in-out;
+  z-index: 0;
 }
 
-/* Album Art (centered on vinyl) */
-#album-art {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-/* Needle */
-#needle {
-  position: absolute;
-  top: -50px;
-  left: 210px;
-  width: 100px;
-  transform-origin: top left;
-  transition: transform 0.5s ease-in-out;
-}
-
-/* Rotation Animation */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.spinning {
-  animation: spin 3s linear infinite;
-}
-
-/* Spotify Panel */
+/* Control panel styled like embedded buttons */
 .spotify-panel {
+  position: absolute;
+  bottom: 8%;
+  right: 6%;
   width: 250px;
+  background: rgba(30, 30, 30, 0.9);
+  padding: 1rem;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }
 
+
 /* Login, Power On and Reset button styling --------------------------------- */
+/* Login button.... */
 #login-btn {
   padding: 0.75rem 1rem;
   border: none;
@@ -97,6 +53,7 @@ body {
   background: #1ed760;
 }
 
+/* Power-on button.... */
 #turnOnVinyl-btn {
   padding: 0.75rem 1rem;
   border: none;
@@ -124,6 +81,26 @@ body {
   cursor: not-allowed;
   box-shadow: none;
   opacity: 0.6;
+}
+
+/* Reset button.... */
+#reset-auth {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: #c0392b;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#reset-auth:hover {
+  background: #e74c3c;
+}
+
+#reset-auth:active {
+  transform: scale(0.96);
 }
 /* -------------------------------------------------------------------------- */
 
