@@ -1,5 +1,22 @@
-let spinning = false;
 let accessToken = null;
+
+// Vinyl Record and Tonearm logic ----------------------------------------------
+let spinning = false;
+const vinyl = document.getElementById("vinyl");
+const albumArtOverlay = document.getElementById("albumArtOverlay");
+
+function startSpinning() {
+  if (!spinning) {
+    vinyl.classList.add("spinning");
+    spinning = true;
+  }
+}
+
+function stopSpinning() {
+  vinyl.classList.remove("spinning");
+  spinning = false;
+}
+
 
 // Spotify Player (Web SKD) initilisation logic --------------------------------
 let player;
@@ -57,6 +74,10 @@ function initSpotifyPlayer() {
 
     // Album art update
     const currentTrack = track_window.current_track;
+    if (currentTrack?.album?.images?.[0]?.url) {
+      albumArtOverlay.src = currentTrack.album.images[0].url;
+    }
+
     if (currentTrack?.album?.images?.[0]?.url) {
       albumArt.src = currentTrack.album.images[0].url;
     }
