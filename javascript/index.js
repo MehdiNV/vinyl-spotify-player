@@ -84,7 +84,7 @@ async function fetchCurrentUserId() {
 }
 
 async function fetchAllPlaylists() {
-  const res = await fetch("https://api.spotify.com/v1/me/playlists?limit=100", {
+  const res = await fetch("https://api.spotify.com/v1/me/playlists?limit=20", {
     headers: { Authorization: `Bearer ${accessToken}` }
   });
 

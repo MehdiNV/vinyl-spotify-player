@@ -81,16 +81,17 @@ body, html {
   text-transform: uppercase;
 }
 
-p {
-  font-family: 'Press Start 2P', monospace;
-}
-
 .spotifyPanelPlaylists {
-  display: none;
+  align-items: center;
   background: white;
   opacity: 0.7;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
   margin-top: 20px;
-  width: 100%;
+  position: absolute;
+  right: 12%;
+  top: 35%;
+  width: 25%;
 }
 /* -------------------------------------------------------------------------- */
 

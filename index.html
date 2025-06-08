@@ -14,7 +14,7 @@
   <div class="container">
     <img src="assets/vinylBox.png" alt="Vinyl Box" class="vinylBoxImage" />
 
-    <!-- Control Panel embedded in box -->
+    <!-- Authentication buttons used with Spotify -->
     <div class="spotify-panel">
       <div class="button-row">
         <button class = "nes-btn is-success loginButton" id = "loginButton">Login</button>
@@ -22,12 +22,13 @@
       </div>
 
       <button class = "nes-btn is-warning resetButton" id = "resetButton">Reset Auth</button>
+    </div>
 
-      <div class="spotifyPanelPlaylists lists nes-container is-rounded with-title">
-        <p class="title">Your playlists</p>
-        <ul class="nes-list is-circle">
-        </ul>
-      </div>
+    <!-- Playlists display box -->
+    <div class="spotifyPanelPlaylists lists nes-container is-rounded with-title">
+      <p class="title spotifyPanelPlaylistsTitle">Your playlists</p>
+      <ul class="nes-list is-circle">
+      </ul>
     </div>
   </div>
 
