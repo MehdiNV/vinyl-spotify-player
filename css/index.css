@@ -101,6 +101,11 @@ body, html {
   width: 25%;
 }
 
+.selected-playlist {
+  background-color: #ffd54f;
+  font-weight: bold;
+}
+
 .playback-controls {
   align-items: flex-start; /* So left column starts from top */
   background: white;

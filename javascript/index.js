@@ -47,11 +47,15 @@ function initSpotifyPlayer() {
 
     if (paused) {
       stopSpinning();
+      playButton.textContent = "▶ Play";
+      isPlaying = false;
     } else {
       startSpinning();
+      playButton.textContent = "⏸ Pause";
+      isPlaying = true;
     }
 
-    // Update album art from current track (not just playlist art)
+    // Album art update
     const currentTrack = track_window.current_track;
     if (currentTrack?.album?.images?.[0]?.url) {
       albumArt.src = currentTrack.album.images[0].url;
@@ -112,6 +116,21 @@ function renderPlaylists(playlists) {
   playlists.forEach(playlist => {
     const li = document.createElement("li");
     li.textContent = playlist.name;
+    li.style.cursor = "pointer";
+
+    // Highlight selected playlist
+    li.addEventListener("click", () => {
+      // Clear selection from all other items
+      document.querySelectorAll(".spotifyPanelPlaylists ul li").forEach(el => {
+        el.classList.remove("selected-playlist");
+      });
+
+      // Mark this one as selected
+      li.classList.add("selected-playlist");
+      selectedPlaylistUri = playlist.uri;
+      console.log(`🎯 Selected playlist: ${playlist.name}`);
+    });
+
     usersPlaylists.appendChild(li);
   });
 }
@@ -186,4 +205,91 @@ resetBtn.addEventListener("click", () => {
   clearSpotifyAuth();
   alert("Auth state cleared. Reload the page and login again.");
 });
+// -----------------------------------------------------------------------------
+
+// Playback controls logic -----------------------------------------------------
+const shuffleToggle = document.getElementById("shuffleToggle");
+
+shuffleToggle.addEventListener("change", async (e) => {
+  const shuffleState = e.target.checked;
+
+  try {
+    await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${shuffleState}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    console.log(`🔀 Shuffle ${shuffleState ? "enabled" : "disabled"}`);
+  } catch (err) {
+    console.error("❌ Failed to update shuffle state:", err);
+  }
+});
+
+const repeatToggle = document.getElementById("repeatToggle");
+
+repeatToggle.addEventListener("change", async (e) => {
+  const repeatState = e.target.checked ? "context" : "off"; // or "track" if you prefer
+
+  try {
+    await fetch(`https://api.spotify.com/v1/me/player/repeat?state=${repeatState}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    console.log(`🔁 Repeat set to: ${repeatState}`);
+  } catch (err) {
+    console.error("❌ Failed to update repeat state:", err);
+  }
+});
+
+const playButton = document.getElementById("playButton");
+let isPlaying = false;
+let selectedPlaylistUri = null;
+
+playButton.addEventListener("click", async () => {
+  if (!window.playerDeviceId) {
+    alert("Spotify Player is not ready yet.");
+    return;
+  }
+
+  try {
+    if (isPlaying) {
+      // Pause
+      await fetch("https://api.spotify.com/v1/me/player/pause", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      playButton.textContent = "▶ Play";
+      isPlaying = false;
+      console.log("⏸ Paused playback");
+    } else {
+      if (!selectedPlaylistUri) {
+        alert("Please select a playlist first.");
+        return;
+      }
+
+      // Play selected playlist
+      await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.playerDeviceId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          context_uri: selectedPlaylistUri,
+          offset: { position: 0 }
+        })
+      });
+
+      playButton.textContent = "⏸ Pause";
+      isPlaying = true;
+      console.log(`▶ Now playing playlist: ${selectedPlaylistUri}`);
+    }
+  } catch (err) {
+    console.error("❌ Playback toggle failed:", err);
+  }
+});
+
 // -----------------------------------------------------------------------------
