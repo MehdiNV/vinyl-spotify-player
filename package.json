@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "dotenv -e .env -- node inject-env.js && http-server ."
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0"
+  }
+}
