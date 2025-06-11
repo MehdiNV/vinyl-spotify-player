@@ -163,7 +163,7 @@ body, html {
 }
 
 .playback-controls {
-  align-items: flex-start; /* So left column starts from top */
+  align-items: center; /* So left column starts from top */
   background: white;
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
