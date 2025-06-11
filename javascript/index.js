@@ -313,4 +313,30 @@ playButton.addEventListener("click", async () => {
   }
 });
 
+const skipButton = document.getElementById("skipButton");
+
+skipButton.addEventListener("click", async () => {
+  if (!accessToken) {
+    alert("Please login first.");
+    return;
+  }
+
+  try {
+    const res = await fetch("https://api.spotify.com/v1/me/player/next", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (res.status === 204) {
+      console.log("⏭ Skipped to next track.");
+    } else {
+      console.warn("⚠️ Skip failed", await res.json());
+    }
+
+  } catch (err) {
+    console.error("❌ Error skipping track:", err);
+  }
+});
 // -----------------------------------------------------------------------------
