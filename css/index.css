@@ -67,8 +67,17 @@ body, html {
   to   { transform: rotate(360deg); }
 }
 
-.spinning {
+@keyframes spinAlbumCover {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.spinningVinyl {
   animation: spinVinyl 3s linear infinite;
+}
+
+.spinningAlbumCover {
+  animation: spinAlbumCover 3s linear infinite;
 }
 /* -------------------------------------------------------------------------- */
 

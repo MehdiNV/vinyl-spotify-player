@@ -7,13 +7,15 @@ const albumArtOverlay = document.getElementById("albumArtOverlay");
 
 function startSpinning() {
   if (!spinning) {
-    vinyl.classList.add("spinning");
+    vinyl.classList.add("spinningVinyl");
+    albumArtOverlay.classList.add("spinningAlbumCover");
     spinning = true;
   }
 }
 
 function stopSpinning() {
-  vinyl.classList.remove("spinning");
+  vinyl.classList.remove("spinningVinyl");
+  albumArtOverlay.classList.remove("spinningAlbumCover");
   spinning = false;
 }
 
