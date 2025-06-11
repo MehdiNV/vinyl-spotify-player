@@ -1,5 +1,5 @@
 const clientId = document.body.dataset.spotifyClientId;
-const redirectUri = "http://127.0.0.1:5500/html/token.html";
+const redirectUri = `${window.location.origin}/token.html`;
 
 const scopes = [
   "streaming",

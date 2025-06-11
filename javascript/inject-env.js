@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const htmlPath = path.join(__dirname, "index.html");
+const htmlPath = path.join(__dirname, "../index.html");
 let html = fs.readFileSync(htmlPath, "utf-8");
 
 const clientId = process.env.SPOTIFY_CLIENT_ID;
