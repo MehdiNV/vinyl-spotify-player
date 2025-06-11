@@ -1,4 +1,4 @@
-const clientId = window.env.SPOTIFY_CLIENT_ID;; // Replace with your Client ID
+const clientId = document.body.dataset.spotifyClientId;
 const redirectUri = "http://127.0.0.1:5500/html/token.html";
 
 const scopes = [
