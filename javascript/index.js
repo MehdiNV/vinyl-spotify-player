@@ -74,14 +74,10 @@ function initSpotifyPlayer() {
       isPlaying = true;
     }
 
-    // Album art update
+    // Update the Album art cover to match what's currently playing
     const currentTrack = track_window.current_track;
     if (currentTrack?.album?.images?.[0]?.url) {
       albumArtOverlay.src = currentTrack.album.images[0].url;
-    }
-
-    if (currentTrack?.album?.images?.[0]?.url) {
-      albumArt.src = currentTrack.album.images[0].url;
     }
   });
 
